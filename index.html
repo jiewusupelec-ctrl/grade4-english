@@ -8,8 +8,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="format-detection" content="telephone=no" />
   <title>Jeff小朋友的暑假快乐英语</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=ZCOOL+KuaiLe&display=swap" media="print" onload="this.media='all'" />
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=ZCOOL+KuaiLe&display=swap" /></noscript>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" /></noscript>
   <style>
     :root {
       --sky: #7ec8e3;
@@ -35,7 +35,7 @@
     body {
       min-height: 100vh;
       min-height: -webkit-fill-available;
-      font-family: "Fredoka", "ZCOOL KuaiLe", "PingFang SC", "Helvetica Neue", sans-serif;
+      font-family: "Open Sans", "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
       color: var(--ink);
       overflow-x: hidden;
       background:
@@ -68,7 +68,7 @@
       font-weight: 700;
       letter-spacing: 0.02em;
       color: var(--sky-deep);
-      text-shadow: 2px 3px 0 rgba(255, 209, 102, 0.7);
+      text-shadow: none;
       animation: bob 3.2s ease-in-out infinite;
       line-height: 1.25;
       word-break: break-word;
@@ -109,8 +109,8 @@
       padding: 14px 8px;
       min-height: 48px;
       font: inherit;
-      font-size: clamp(0.78rem, 2.6vw, 1rem);
-      font-weight: 600;
+      font-size: clamp(0.95rem, 3.2vw, 1.15rem);
+      font-weight: 700;
       cursor: pointer;
       background: rgba(255, 255, 255, 0.72);
       color: var(--ink);
@@ -469,6 +469,14 @@
         backdrop-filter: blur(8px);
       }
 
+      .tab-btn {
+        font-size: 1.08rem;
+        font-weight: 700;
+        padding: 15px 8px;
+        min-height: 52px;
+        line-height: 1.25;
+      }
+
       .panel {
         padding: 16px 12px 20px;
         border-radius: 18px;
@@ -512,8 +520,8 @@
       .brand { font-size: 1.2rem; }
 
       .tab-btn {
-        font-size: 0.78rem;
-        padding: 12px 6px;
+        font-size: 1rem;
+        padding: 14px 6px;
       }
 
       .toolbar > * {
