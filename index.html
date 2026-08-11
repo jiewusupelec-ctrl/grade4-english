@@ -2,8 +2,9 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>快乐英语 · 四年级</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#3a9fc4" />
+  <title>Jeff小朋友的暑假快乐英语</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet" />
@@ -25,12 +26,16 @@
 
     html {
       font-size: 130%;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
     }
 
     body {
       min-height: 100vh;
+      min-height: 100dvh;
       font-family: "Fredoka", "ZCOOL KuaiLe", sans-serif;
       color: var(--ink);
+      overflow-x: hidden;
       background:
         radial-gradient(circle at 12% 18%, rgba(255, 209, 102, 0.45), transparent 42%),
         radial-gradient(circle at 88% 12%, rgba(126, 200, 227, 0.55), transparent 40%),
@@ -40,8 +45,11 @@
 
     .app {
       max-width: 920px;
+      width: 100%;
       margin: 0 auto;
-      padding: 20px 16px 48px;
+      padding: 20px 16px calc(48px + env(safe-area-inset-bottom));
+      padding-left: max(16px, env(safe-area-inset-left));
+      padding-right: max(16px, env(safe-area-inset-right));
     }
 
     header.hero {
@@ -51,18 +59,21 @@
     }
 
     .brand {
-      font-size: clamp(2.2rem, 7vw, 3.4rem);
+      font-size: clamp(1.35rem, 5.5vw, 2.6rem);
       font-weight: 700;
       letter-spacing: 0.02em;
       color: var(--sky-deep);
       text-shadow: 2px 3px 0 rgba(255, 209, 102, 0.7);
       animation: bob 3.2s ease-in-out infinite;
+      line-height: 1.25;
+      word-break: break-word;
     }
 
     .tagline {
       margin-top: 8px;
-      font-size: 1.05rem;
+      font-size: clamp(0.85rem, 3.2vw, 1.05rem);
       color: #516068;
+      line-height: 1.4;
     }
 
     @keyframes bob {
@@ -91,14 +102,17 @@
       border: none;
       border-radius: 16px;
       padding: 14px 8px;
+      min-height: 48px;
       font: inherit;
-      font-size: clamp(0.85rem, 2.6vw, 1rem);
+      font-size: clamp(0.78rem, 2.6vw, 1rem);
       font-weight: 600;
       cursor: pointer;
       background: rgba(255, 255, 255, 0.72);
       color: var(--ink);
       box-shadow: var(--shadow);
       transition: transform 0.18s ease, background 0.18s ease;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
 
     .tab-btn:hover { transform: translateY(-2px); }
@@ -119,9 +133,11 @@
     .panel.active { display: block; }
 
     h2 {
-      font-size: 1.45rem;
+      font-size: clamp(1.15rem, 4.5vw, 1.45rem);
       margin-bottom: 6px;
       color: var(--sky-deep);
+      line-height: 1.35;
+      word-break: break-word;
     }
 
     .hint {
@@ -132,7 +148,7 @@
 
     .word-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 180px), 1fr));
       gap: 14px;
     }
 
@@ -172,13 +188,16 @@
     .speak-btn, .action-btn, .quiz-btn, .nav-btn {
       border: none;
       border-radius: 999px;
-      padding: 10px 16px;
+      padding: 12px 16px;
+      min-height: 44px;
       font: inherit;
       font-weight: 600;
       cursor: pointer;
       background: var(--sun);
       color: var(--ink);
       box-shadow: 0 4px 0 rgba(0, 0, 0, 0.08);
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
 
     .speak-btn:active, .action-btn:active, .quiz-btn:active, .nav-btn:active {
@@ -196,6 +215,18 @@
       gap: 10px;
       margin-bottom: 16px;
       align-items: center;
+      justify-content: flex-start;
+    }
+
+    .toolbar > * {
+      flex: 1 1 auto;
+      min-width: max-content;
+      text-align: center;
+    }
+
+    .book-nav .nav-btn {
+      flex: 1;
+      text-align: center;
     }
 
     .flash-stage {
@@ -208,6 +239,7 @@
 
     .flash-card {
       width: min(100%, 340px);
+      max-width: 100%;
       height: 240px;
       position: relative;
       transform-style: preserve-3d;
@@ -242,8 +274,14 @@
       transform: rotateY(180deg);
     }
 
-    .flash-word { font-size: 2.4rem; font-weight: 700; }
-    .flash-meta { margin-top: 10px; font-size: 1.15rem; opacity: 0.95; }
+    .flash-word {
+      font-size: clamp(1.5rem, 8vw, 2.4rem);
+      font-weight: 700;
+      text-align: center;
+      word-break: break-word;
+      padding: 0 8px;
+    }
+    .flash-meta { margin-top: 10px; font-size: 1.15rem; opacity: 0.95; text-align: center; }
     .progress { margin-top: 14px; text-align: center; color: #516068; }
 
     .quiz-item {
@@ -394,15 +432,89 @@
     }
 
     @media (max-width: 640px) {
-      nav.tabs { grid-template-columns: repeat(2, 1fr); }
-      .scene { height: 150px; font-size: 2.6rem; }
+      html { font-size: 112%; }
+
+      .app {
+        padding-top: 12px;
+        padding-bottom: calc(28px + env(safe-area-inset-bottom));
+      }
+
+      header.hero { padding: 16px 4px 10px; }
+
+      nav.tabs {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        margin: 12px 0 16px;
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        padding: 6px 0;
+        background: linear-gradient(180deg, rgba(232, 247, 252, 0.96), rgba(232, 247, 252, 0.88));
+        backdrop-filter: blur(8px);
+      }
+
+      .panel {
+        padding: 16px 12px 20px;
+        border-radius: 18px;
+      }
+
+      .hint { font-size: 0.88rem; margin-bottom: 12px; }
+
+      .word-grid { grid-template-columns: 1fr; gap: 10px; }
+
+      .word-card { padding: 14px; }
+
+      .toolbar { gap: 8px; }
+
+      .toolbar > * {
+        flex: 1 1 calc(50% - 8px);
+        min-width: 0;
+      }
+
+      .flash-stage { min-height: 220px; }
+
+      .flash-card {
+        width: min(100%, 100%);
+        height: 210px;
+      }
+
+      .scene { height: 140px; font-size: 2.4rem; }
+
+      .story-text { font-size: 1.02rem; line-height: 1.6; }
+
+      .option {
+        padding: 12px;
+        min-height: 48px;
+      }
+
+      .book-nav { gap: 8px; }
+    }
+
+    @media (max-width: 380px) {
+      html { font-size: 100%; }
+
+      .brand { font-size: 1.2rem; }
+
+      .tab-btn {
+        font-size: 0.78rem;
+        padding: 12px 6px;
+      }
+
+      .toolbar > * {
+        flex: 1 1 100%;
+      }
+    }
+
+    @media (min-width: 641px) and (max-width: 900px) {
+      html { font-size: 120%; }
+      .word-grid { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
 <body>
   <div class="app">
     <header class="hero">
-      <div class="brand">快乐英语</div>
+      <div class="brand">Jeff小朋友的暑假快乐英语</div>
       <p class="tagline">四～五年级 · 每日单词 · 速记 · 绘本阅读</p>
     </header>
 
