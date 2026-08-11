@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>快乐英语 · 四年级</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --sky: #7ec8e3;
+      --sky-deep: #3a9fc4;
+      --sun: #ffd166;
+      --leaf: #6bcb77;
+      --coral: #ff6b6b;
+      --cream: #fff8e7;
+      --ink: #2d3436;
+      --card: #ffffff;
+      --shadow: 0 10px 30px rgba(45, 52, 54, 0.12);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      font-size: 130%;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: "Fredoka", "ZCOOL KuaiLe", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 18%, rgba(255, 209, 102, 0.45), transparent 42%),
+        radial-gradient(circle at 88% 12%, rgba(126, 200, 227, 0.55), transparent 40%),
+        radial-gradient(circle at 70% 85%, rgba(107, 203, 119, 0.35), transparent 45%),
+        linear-gradient(165deg, #e8f7fc 0%, #fff8e7 48%, #eaf9ef 100%);
+    }
+
+    .app {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 20px 16px 48px;
+    }
+
+    header.hero {
+      text-align: center;
+      padding: 28px 12px 18px;
+      position: relative;
+    }
+
+    .brand {
+      font-size: clamp(2.2rem, 7vw, 3.4rem);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: var(--sky-deep);
+      text-shadow: 2px 3px 0 rgba(255, 209, 102, 0.7);
+      animation: bob 3.2s ease-in-out infinite;
+    }
+
+    .tagline {
+      margin-top: 8px;
+      font-size: 1.05rem;
+      color: #516068;
+    }
+
+    @keyframes bob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.92); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes flipIn {
+      from { transform: rotateY(90deg); opacity: 0; }
+      to { transform: rotateY(0); opacity: 1; }
+    }
+
+    nav.tabs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin: 18px 0 22px;
+    }
+
+    .tab-btn {
+      border: none;
+      border-radius: 16px;
+      padding: 14px 8px;
+      font: inherit;
+      font-size: clamp(0.85rem, 2.6vw, 1rem);
+      font-weight: 600;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--ink);
+      box-shadow: var(--shadow);
+      transition: transform 0.18s ease, background 0.18s ease;
+    }
+
+    .tab-btn:hover { transform: translateY(-2px); }
+    .tab-btn.active {
+      background: var(--sky-deep);
+      color: #fff;
+    }
+
+    .panel {
+      display: none;
+      animation: pop 0.35s ease;
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 22px 18px 26px;
+      box-shadow: var(--shadow);
+    }
+
+    .panel.active { display: block; }
+
+    h2 {
+      font-size: 1.45rem;
+      margin-bottom: 6px;
+      color: var(--sky-deep);
+    }
+
+    .hint {
+      color: #66757c;
+      margin-bottom: 18px;
+      font-size: 0.95rem;
+    }
+
+    .word-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 14px;
+    }
+
+    .word-card {
+      background: linear-gradient(160deg, #f0fbff, #fff9ec);
+      border-radius: 18px;
+      padding: 16px;
+      border: 2px solid rgba(58, 159, 196, 0.15);
+      transition: transform 0.2s ease;
+    }
+
+    .word-card:hover { transform: scale(1.03); }
+
+    .word-en {
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: #1f6f8b;
+    }
+
+    .word-phonetic {
+      font-size: 0.85rem;
+      color: #7a8a92;
+      margin: 2px 0 8px;
+    }
+
+    .word-zh {
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+    }
+
+    .example {
+      font-size: 0.9rem;
+      color: #516068;
+      line-height: 1.4;
+    }
+
+    .speak-btn, .action-btn, .quiz-btn, .nav-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 10px 16px;
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      background: var(--sun);
+      color: var(--ink);
+      box-shadow: 0 4px 0 rgba(0, 0, 0, 0.08);
+    }
+
+    .speak-btn:active, .action-btn:active, .quiz-btn:active, .nav-btn:active {
+      transform: translateY(2px);
+      box-shadow: none;
+    }
+
+    .action-btn.primary, .quiz-btn.primary { background: var(--leaf); color: #143d1f; }
+    .action-btn.coral, .nav-btn.coral { background: var(--coral); color: #fff; }
+    .action-btn.sky { background: var(--sky); color: #13485c; }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+      align-items: center;
+    }
+
+    .flash-stage {
+      perspective: 1000px;
+      min-height: 260px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .flash-card {
+      width: min(100%, 340px);
+      height: 240px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.55s ease;
+      cursor: pointer;
+      animation: flipIn 0.4s ease;
+    }
+
+    .flash-card.flipped { transform: rotateY(180deg); }
+
+    .flash-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      border-radius: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .flash-front {
+      background: linear-gradient(145deg, #3a9fc4, #7ec8e3);
+      color: #fff;
+    }
+
+    .flash-back {
+      background: linear-gradient(145deg, #ffd166, #ffe8a3);
+      color: var(--ink);
+      transform: rotateY(180deg);
+    }
+
+    .flash-word { font-size: 2.4rem; font-weight: 700; }
+    .flash-meta { margin-top: 10px; font-size: 1.15rem; opacity: 0.95; }
+    .progress { margin-top: 14px; text-align: center; color: #516068; }
+
+    .quiz-item {
+      background: #f7fcff;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 14px;
+      border: 2px solid rgba(58, 159, 196, 0.12);
+    }
+
+    .quiz-item h3 {
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+    }
+
+    .options {
+      display: grid;
+      gap: 8px;
+    }
+
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #fff;
+      border: 2px solid #d7e8ef;
+      border-radius: 12px;
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .option:hover { border-color: var(--sky-deep); }
+    .option.correct { border-color: var(--leaf); background: #e9f9ec; }
+    .option.wrong { border-color: var(--coral); background: #ffeaea; }
+    .option input { accent-color: var(--sky-deep); }
+
+    .score-box {
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 16px;
+      background: linear-gradient(120deg, #eaf9ef, #fff6d8);
+      font-size: 1.15rem;
+      font-weight: 600;
+      display: none;
+    }
+
+    .score-box.show { display: block; }
+
+    .book-frame {
+      border-radius: 20px;
+      overflow: hidden;
+      background: #fffdf7;
+      border: 3px solid rgba(58, 159, 196, 0.2);
+      min-height: 360px;
+      position: relative;
+    }
+
+    .book-page {
+      display: none;
+      padding: 20px 18px 24px;
+      animation: pop 0.35s ease;
+    }
+
+    .book-page.active { display: block; }
+
+    .scene {
+      height: 180px;
+      border-radius: 16px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 8px;
+      font-size: 3.4rem;
+      padding-bottom: 18px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .scene::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: 0.9;
+    }
+
+    .scene span { position: relative; z-index: 1; animation: bob 2.8s ease-in-out infinite; }
+    .scene span:nth-child(2) { animation-delay: 0.3s; }
+    .scene span:nth-child(3) { animation-delay: 0.6s; }
+
+    .scene.park::before {
+      background: linear-gradient(180deg, #87ceeb 0%, #87ceeb 55%, #7dce82 55%, #5bb86a 100%);
+    }
+    .scene.home::before {
+      background: linear-gradient(180deg, #ffd89b 0%, #ffb347 40%, #f5e6c8 40%, #e8d5b0 100%);
+    }
+    .scene.school::before {
+      background: linear-gradient(180deg, #a8d8ea 0%, #71c4d8 50%, #c4a574 50%, #b8956a 100%);
+    }
+    .scene.night::before {
+      background: linear-gradient(180deg, #1a2744 0%, #2d3e5f 60%, #3d4f3a 60%, #2f3d2c 100%);
+    }
+
+    .story-text {
+      font-size: 1.15rem;
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    .story-text .zh {
+      display: block;
+      margin-top: 8px;
+      color: #66757c;
+      font-size: 0.95rem;
+    }
+
+    .page-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin: 14px 0;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #c5d8e0;
+    }
+
+    .dot.on { background: var(--sky-deep); transform: scale(1.2); }
+
+    .book-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .hidden { display: none !important; }
+
+    footer {
+      text-align: center;
+      margin-top: 22px;
+      color: #7a8a92;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 640px) {
+      nav.tabs { grid-template-columns: repeat(2, 1fr); }
+      .scene { height: 150px; font-size: 2.6rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="hero">
+      <div class="brand">快乐英语</div>
+      <p class="tagline">四年级小朋友的每日单词 · 速记 · 绘本阅读</p>
+    </header>
+
+    <nav class="tabs" role="tablist">
+      <button class="tab-btn active" data-tab="daily">每日单词</button>
+      <button class="tab-btn" data-tab="flash">单词速记</button>
+      <button class="tab-btn" data-tab="weekly">每周测评</button>
+      <button class="tab-btn" data-tab="book">在线绘本</button>
+    </nav>
+
+    <!-- 每日单词 -->
+    <section id="daily" class="panel active">
+      <h2>今日单词</h2>
+      <p class="hint" id="daily-date">今天要记住这些单词哦！点喇叭可以听发音。</p>
+      <div class="toolbar">
+        <button class="action-btn sky" id="refresh-daily">换一组</button>
+        <button class="action-btn" id="speak-all">全部朗读</button>
+      </div>
+      <div class="word-grid" id="daily-words"></div>
+    </section>
+
+    <!-- 单词速记 -->
+    <section id="flash" class="panel">
+      <h2>单词速记</h2>
+      <p class="hint">点击卡片翻转，看英文猜中文，或看中文想英文。</p>
+      <div class="toolbar">
+        <button class="action-btn sky" id="flash-prev">上一张</button>
+        <button class="action-btn primary" id="flash-flip">翻转</button>
+        <button class="action-btn sky" id="flash-next">下一张</button>
+        <button class="action-btn" id="flash-speak">朗读</button>
+      </div>
+      <div class="flash-stage">
+        <div class="flash-card" id="flash-card">
+          <div class="flash-face flash-front">
+            <div class="flash-word" id="flash-front-text">apple</div>
+            <div class="flash-meta">点击翻转</div>
+          </div>
+          <div class="flash-face flash-back">
+            <div class="flash-word" id="flash-back-text">苹果</div>
+            <div class="flash-meta" id="flash-back-meta">/ˈæpl/</div>
+          </div>
+        </div>
+      </div>
+      <p class="progress" id="flash-progress">1 / 10</p>
+    </section>
+
+    <!-- 每周测评 -->
+    <section id="weekly" class="panel">
+      <h2>每周单词测评</h2>
+      <p class="hint">本周共 8 题，选出正确的意思或单词。加油！</p>
+      <div id="quiz-list"></div>
+      <div class="toolbar">
+        <button class="quiz-btn primary" id="submit-quiz">交卷看分数</button>
+        <button class="quiz-btn" id="reset-quiz">再测一次</button>
+      </div>
+      <div class="score-box" id="score-box"></div>
+    </section>
+
+    <!-- 在线绘本 -->
+    <section id="book" class="panel">
+      <h2>绘本阅读：《小兔子的一天》</h2>
+      <p class="hint">先读完故事，再做后面的 3 道阅读理解题。</p>
+
+      <div id="book-reader">
+        <div class="book-frame" id="book-pages"></div>
+        <div class="page-dots" id="page-dots"></div>
+        <div class="book-nav">
+          <button class="nav-btn" id="book-prev">上一页</button>
+          <button class="nav-btn coral" id="book-next">下一页</button>
+        </div>
+      </div>
+
+      <div id="book-quiz" class="hidden">
+        <h2 style="margin-top:8px">阅读理解（3题）</h2>
+        <p class="hint">根据刚才的绘本，选择正确答案。</p>
+        <div id="reading-quiz"></div>
+        <div class="toolbar">
+          <button class="quiz-btn primary" id="submit-reading">提交答案</button>
+          <button class="quiz-btn" id="reread-book">再读一遍</button>
+        </div>
+        <div class="score-box" id="reading-score"></div>
+      </div>
+    </section>
+
+    <footer>打开本页面即可学习 · 建议使用 Chrome / Edge</footer>
+  </div>
+
+  <script>
+    /* ========== 词库（四年级常用词） ========== */
+    const WORD_BANK = [
+      { en: "apple", phonetic: "/ˈæpl/", zh: "苹果", example: "I eat an apple every day." },
+      { en: "school", phonetic: "/skuːl/", zh: "学校", example: "I go to school at 7:30." },
+      { en: "friend", phonetic: "/frend/", zh: "朋友", example: "Tom is my best friend." },
+      { en: "happy", phonetic: "/ˈhæpi/", zh: "开心的", example: "She feels happy today." },
+      { en: "water", phonetic: "/ˈwɔːtə/", zh: "水", example: "Please drink some water." },
+      { en: "family", phonetic: "/ˈfæməli/", zh: "家庭", example: "I love my family." },
+      { en: "morning", phonetic: "/ˈmɔːnɪŋ/", zh: "早晨", example: "Good morning, teacher!" },
+      { en: "animal", phonetic: "/ˈænɪml/", zh: "动物", example: "The panda is a cute animal." },
+      { en: "library", phonetic: "/ˈlaɪbrəri/", zh: "图书馆", example: "We read books in the library." },
+      { en: "beautiful", phonetic: "/ˈbjuːtɪfl/", zh: "美丽的", example: "The park is beautiful." },
+      { en: "breakfast", phonetic: "/ˈbrekfəst/", zh: "早餐", example: "I have eggs for breakfast." },
+      { en: "weather", phonetic: "/ˈweðə/", zh: "天气", example: "The weather is sunny." },
+      { en: "homework", phonetic: "/ˈhəʊmwɜːk/", zh: "家庭作业", example: "I finish my homework first." },
+      { en: "garden", phonetic: "/ˈɡɑːdn/", zh: "花园", example: "There are flowers in the garden." },
+      { en: "teacher", phonetic: "/ˈtiːtʃə/", zh: "老师", example: "Our teacher is kind." },
+      { en: "weekend", phonetic: "/ˌwiːkˈend/", zh: "周末", example: "I play football on the weekend." },
+      { en: "hungry", phonetic: "/ˈhʌŋɡri/", zh: "饥饿的", example: "I am hungry after PE." },
+      { en: "carefully", phonetic: "/ˈkeəfəli/", zh: "仔细地", example: "Please write carefully." },
+      { en: "together", phonetic: "/təˈɡeðə/", zh: "一起", example: "Let's read together." },
+      { en: "because", phonetic: "/bɪˈkɒz/", zh: "因为", example: "I stay home because it rains." }
+    ];
+
+    const BOOK_PAGES = [
+      {
+        scene: "home",
+        icons: ["☀️", "🏠", "🐰"],
+        en: "Bunny wakes up in the morning. The sun is bright.",
+        zh: "小兔子早上醒来。太阳很明亮。"
+      },
+      {
+        scene: "home",
+        icons: ["🥛", "🍞", "🐰"],
+        en: "He has milk and bread for breakfast. He feels happy.",
+        zh: "他早餐喝牛奶、吃面包。他觉得很开心。"
+      },
+      {
+        scene: "school",
+        icons: ["🎒", "🏫", "🐰"],
+        en: "Bunny goes to school with his friend Duck.",
+        zh: "小兔子和朋友小鸭子一起去学校。"
+      },
+      {
+        scene: "school",
+        icons: ["📚", "✏️", "🐰"],
+        en: "In class, they learn new words and write carefully.",
+        zh: "在课堂上，他们学习新单词，并认真书写。"
+      },
+      {
+        scene: "park",
+        icons: ["🌳", "⚽", "🐰"],
+        en: "After school, they play football in the park.",
+        zh: "放学后，他们在公园踢足球。"
+      },
+      {
+        scene: "night",
+        icons: ["🌙", "⭐", "🐰"],
+        en: "At night, Bunny reads a book and says, \"Good night!\"",
+        zh: "晚上，小兔子读一本书，然后说：“晚安！”"
+      }
+    ];
+
+    const READING_QUESTIONS = [
+      {
+        q: "1. What does Bunny have for breakfast?",
+        options: ["Milk and bread", "Rice and fish", "Cake and juice", "Eggs only"],
+        answer: 0
+      },
+      {
+        q: "2. Who goes to school with Bunny?",
+        options: ["Cat", "Duck", "Bear", "Bird"],
+        answer: 1
+      },
+      {
+        q: "3. What do they do in the park after school?",
+        options: ["Swim", "Sing songs", "Play football", "Sleep"],
+        answer: 2
+      }
+    ];
+
+    /* ========== 工具 ========== */
+    function daySeed() {
+      const d = new Date();
+      return d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
+    }
+
+    function seededShuffle(arr, seed) {
+      const a = arr.slice();
+      let s = seed % 2147483647;
+      if (s <= 0) s += 2147483646;
+      for (let i = a.length - 1; i > 0; i--) {
+        s = (s * 16807) % 2147483647;
+        const j = s % (i + 1);
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function speak(text) {
+      if (!window.speechSynthesis) {
+        alert("当前浏览器不支持朗读，请换 Chrome 或 Edge 试试。");
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = "en-US";
+      u.rate = 0.9;
+      window.speechSynthesis.speak(u);
+    }
+
+    function weekKey() {
+      const d = new Date();
+      const oneJan = new Date(d.getFullYear(), 0, 1);
+      const week = Math.ceil((((d - oneJan) / 86400000) + oneJan.getDay() + 1) / 7);
+      return d.getFullYear() + "-W" + week;
+    }
+
+    /* ========== 标签切换 ========== */
+    const tabs = document.querySelectorAll(".tab-btn");
+    const panels = document.querySelectorAll(".panel");
+
+    tabs.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        tabs.forEach((b) => b.classList.remove("active"));
+        panels.forEach((p) => p.classList.remove("active"));
+        btn.classList.add("active");
+        document.getElementById(btn.dataset.tab).classList.add("active");
+      });
+    });
+
+    /* ========== 每日单词 ========== */
+    let dailyOffset = 0;
+    let dailyWords = [];
+
+    function renderDaily() {
+      const seed = daySeed() + dailyOffset * 97;
+      dailyWords = seededShuffle(WORD_BANK, seed).slice(0, 6);
+      const date = new Date();
+      document.getElementById("daily-date").textContent =
+        `${date.getMonth() + 1}月${date.getDate()}日 · 今天要记住这 ${dailyWords.length} 个单词，点喇叭听发音！`;
+
+      const box = document.getElementById("daily-words");
+      box.innerHTML = dailyWords.map((w, i) => `
+        <article class="word-card">
+          <div class="word-en">${w.en}</div>
+          <div class="word-phonetic">${w.phonetic}</div>
+          <div class="word-zh">${w.zh}</div>
+          <div class="example">${w.example}</div>
+          <button class="speak-btn" style="margin-top:12px" data-speak="${w.en}">🔊 朗读</button>
+        </article>
+      `).join("");
+
+      box.querySelectorAll("[data-speak]").forEach((btn) => {
+        btn.addEventListener("click", () => speak(btn.dataset.speak));
+      });
+    }
+
+    document.getElementById("refresh-daily").addEventListener("click", () => {
+      dailyOffset += 1;
+      renderDaily();
+    });
+
+    document.getElementById("speak-all").addEventListener("click", () => {
+      dailyWords.forEach((w, i) => {
+        setTimeout(() => speak(w.en), i * 1200);
+      });
+    });
+
+    /* ========== 单词速记 ========== */
+    let flashWords = [];
+    let flashIndex = 0;
+
+    function initFlash() {
+      flashWords = seededShuffle(WORD_BANK, daySeed() + 3).slice(0, 10);
+      flashIndex = 0;
+      showFlash();
+    }
+
+    function showFlash() {
+      const w = flashWords[flashIndex];
+      const card = document.getElementById("flash-card");
+      card.classList.remove("flipped");
+      document.getElementById("flash-front-text").textContent = w.en;
+      document.getElementById("flash-back-text").textContent = w.zh;
+      document.getElementById("flash-back-meta").textContent = w.phonetic + " · " + w.example;
+      document.getElementById("flash-progress").textContent =
+        `${flashIndex + 1} / ${flashWords.length}`;
+    }
+
+    document.getElementById("flash-card").addEventListener("click", () => {
+      document.getElementById("flash-card").classList.toggle("flipped");
+    });
+    document.getElementById("flash-flip").addEventListener("click", () => {
+      document.getElementById("flash-card").classList.toggle("flipped");
+    });
+    document.getElementById("flash-prev").addEventListener("click", () => {
+      flashIndex = (flashIndex - 1 + flashWords.length) % flashWords.length;
+      showFlash();
+    });
+    document.getElementById("flash-next").addEventListener("click", () => {
+      flashIndex = (flashIndex + 1) % flashWords.length;
+      showFlash();
+    });
+    document.getElementById("flash-speak").addEventListener("click", () => {
+      speak(flashWords[flashIndex].en);
+    });
+
+    /* ========== 每周测评 ========== */
+    let quizData = [];
+
+    function buildWeeklyQuiz() {
+      const words = seededShuffle(WORD_BANK, weekKey().split("").reduce((a, c) => a + c.charCodeAt(0), 0)).slice(0, 8);
+      quizData = words.map((w, idx) => {
+        const type = idx % 2; // 0: EN->ZH, 1: ZH->EN
+        const wrongPool = WORD_BANK.filter((x) => x.en !== w.en);
+        const wrongs = seededShuffle(wrongPool, idx * 17 + 5).slice(0, 3);
+        let options, answerText, question;
+
+        if (type === 0) {
+          question = `${idx + 1}. “${w.en}” 的中文意思是？`;
+          options = seededShuffle([w.zh, ...wrongs.map((x) => x.zh)], idx + 11);
+          answerText = w.zh;
+        } else {
+          question = `${idx + 1}. “${w.zh}” 对应的英文是？`;
+          options = seededShuffle([w.en, ...wrongs.map((x) => x.en)], idx + 23);
+          answerText = w.en;
+        }
+        return { question, options, answer: options.indexOf(answerText) };
+      });
+
+      const list = document.getElementById("quiz-list");
+      list.innerHTML = quizData.map((item, i) => `
+        <div class="quiz-item" data-q="${i}">
+          <h3>${item.question}</h3>
+          <div class="options">
+            ${item.options.map((opt, j) => `
+              <label class="option">
+                <input type="radio" name="q${i}" value="${j}" />
+                <span>${opt}</span>
+              </label>
+            `).join("")}
+          </div>
+        </div>
+      `).join("");
+
+      document.getElementById("score-box").classList.remove("show");
+      document.getElementById("score-box").textContent = "";
+    }
+
+    document.getElementById("submit-quiz").addEventListener("click", () => {
+      let score = 0;
+      quizData.forEach((item, i) => {
+        const block = document.querySelector(`.quiz-item[data-q="${i}"]`);
+        const options = block.querySelectorAll(".option");
+        const selected = block.querySelector(`input[name="q${i}"]:checked`);
+        options.forEach((o) => o.classList.remove("correct", "wrong"));
+        options[item.answer].classList.add("correct");
+        if (selected) {
+          const val = Number(selected.value);
+          if (val === item.answer) score += 1;
+          else options[val].classList.add("wrong");
+        }
+      });
+      const box = document.getElementById("score-box");
+      const stars = score >= 7 ? "⭐⭐⭐ 太棒了！" : score >= 5 ? "⭐⭐ 不错哦！" : "⭐ 再复习一下，你可以的！";
+      box.textContent = `得分：${score} / ${quizData.length}　${stars}`;
+      box.classList.add("show");
+    });
+
+    document.getElementById("reset-quiz").addEventListener("click", buildWeeklyQuiz);
+
+    /* ========== 绘本阅读 ========== */
+    let pageIndex = 0;
+
+    function renderBook() {
+      const pagesEl = document.getElementById("book-pages");
+      const dotsEl = document.getElementById("page-dots");
+
+      pagesEl.innerHTML = BOOK_PAGES.map((p, i) => `
+        <div class="book-page ${i === pageIndex ? "active" : ""}" data-page="${i}">
+          <div class="scene ${p.scene}">
+            ${p.icons.map((ic) => `<span>${ic}</span>`).join("")}
+          </div>
+          <p class="story-text">
+            ${p.en}
+            <span class="zh">${p.zh}</span>
+          </p>
+        </div>
+      `).join("");
+
+      dotsEl.innerHTML = BOOK_PAGES.map((_, i) =>
+        `<span class="dot ${i === pageIndex ? "on" : ""}"></span>`
+      ).join("");
+
+      document.getElementById("book-prev").disabled = pageIndex === 0;
+      const nextBtn = document.getElementById("book-next");
+      if (pageIndex >= BOOK_PAGES.length - 1) {
+        nextBtn.textContent = "去做练习";
+      } else {
+        nextBtn.textContent = "下一页";
+      }
+    }
+
+    function showReadingQuiz() {
+      document.getElementById("book-reader").classList.add("hidden");
+      document.getElementById("book-quiz").classList.remove("hidden");
+      const box = document.getElementById("reading-quiz");
+      box.innerHTML = READING_QUESTIONS.map((item, i) => `
+        <div class="quiz-item" data-rq="${i}">
+          <h3>${item.q}</h3>
+          <div class="options">
+            ${item.options.map((opt, j) => `
+              <label class="option">
+                <input type="radio" name="rq${i}" value="${j}" />
+                <span>${opt}</span>
+              </label>
+            `).join("")}
+          </div>
+        </div>
+      `).join("");
+      document.getElementById("reading-score").classList.remove("show");
+    }
+
+    document.getElementById("book-prev").addEventListener("click", () => {
+      if (pageIndex > 0) {
+        pageIndex -= 1;
+        renderBook();
+      }
+    });
+
+    document.getElementById("book-next").addEventListener("click", () => {
+      if (pageIndex < BOOK_PAGES.length - 1) {
+        pageIndex += 1;
+        renderBook();
+      } else {
+        showReadingQuiz();
+      }
+    });
+
+    document.getElementById("submit-reading").addEventListener("click", () => {
+      let score = 0;
+      READING_QUESTIONS.forEach((item, i) => {
+        const block = document.querySelector(`.quiz-item[data-rq="${i}"]`);
+        const options = block.querySelectorAll(".option");
+        const selected = block.querySelector(`input[name="rq${i}"]:checked`);
+        options.forEach((o) => o.classList.remove("correct", "wrong"));
+        options[item.answer].classList.add("correct");
+        if (selected) {
+          const val = Number(selected.value);
+          if (val === item.answer) score += 1;
+          else options[val].classList.add("wrong");
+        }
+      });
+      const box = document.getElementById("reading-score");
+      const msg = score === 3 ? "满分！你是阅读小达人 🌟" : score === 2 ? "很棒，再看一遍故事会更好！" : "没关系，再读一遍绘本再试试～";
+      box.textContent = `阅读理解得分：${score} / 3　${msg}`;
+      box.classList.add("show");
+    });
+
+    document.getElementById("reread-book").addEventListener("click", () => {
+      pageIndex = 0;
+      document.getElementById("book-quiz").classList.add("hidden");
+      document.getElementById("book-reader").classList.remove("hidden");
+      renderBook();
+    });
+
+    /* ========== 启动 ========== */
+    renderDaily();
+    initFlash();
+    buildWeeklyQuiz();
+    renderBook();
+  </script>
+</body>
+</html>
