@@ -403,7 +403,7 @@
   <div class="app">
     <header class="hero">
       <div class="brand">快乐英语</div>
-      <p class="tagline">四年级小朋友的每日单词 · 速记 · 绘本阅读</p>
+      <p class="tagline">四～五年级 · 每日单词 · 速记 · 绘本阅读</p>
     </header>
 
     <nav class="tabs" role="tablist">
@@ -491,83 +491,93 @@
   </div>
 
   <script>
-    /* ========== 词库（四年级常用词） ========== */
+    /* ========== 词库（四～五年级） ========== */
     const WORD_BANK = [
-      { en: "apple", phonetic: "/ˈæpl/", zh: "苹果", example: "I eat an apple every day." },
-      { en: "school", phonetic: "/skuːl/", zh: "学校", example: "I go to school at 7:30." },
-      { en: "friend", phonetic: "/frend/", zh: "朋友", example: "Tom is my best friend." },
-      { en: "happy", phonetic: "/ˈhæpi/", zh: "开心的", example: "She feels happy today." },
-      { en: "water", phonetic: "/ˈwɔːtə/", zh: "水", example: "Please drink some water." },
-      { en: "family", phonetic: "/ˈfæməli/", zh: "家庭", example: "I love my family." },
-      { en: "morning", phonetic: "/ˈmɔːnɪŋ/", zh: "早晨", example: "Good morning, teacher!" },
-      { en: "animal", phonetic: "/ˈænɪml/", zh: "动物", example: "The panda is a cute animal." },
-      { en: "library", phonetic: "/ˈlaɪbrəri/", zh: "图书馆", example: "We read books in the library." },
-      { en: "beautiful", phonetic: "/ˈbjuːtɪfl/", zh: "美丽的", example: "The park is beautiful." },
-      { en: "breakfast", phonetic: "/ˈbrekfəst/", zh: "早餐", example: "I have eggs for breakfast." },
-      { en: "weather", phonetic: "/ˈweðə/", zh: "天气", example: "The weather is sunny." },
-      { en: "homework", phonetic: "/ˈhəʊmwɜːk/", zh: "家庭作业", example: "I finish my homework first." },
-      { en: "garden", phonetic: "/ˈɡɑːdn/", zh: "花园", example: "There are flowers in the garden." },
-      { en: "teacher", phonetic: "/ˈtiːtʃə/", zh: "老师", example: "Our teacher is kind." },
-      { en: "weekend", phonetic: "/ˌwiːkˈend/", zh: "周末", example: "I play football on the weekend." },
-      { en: "hungry", phonetic: "/ˈhʌŋɡri/", zh: "饥饿的", example: "I am hungry after PE." },
-      { en: "carefully", phonetic: "/ˈkeəfəli/", zh: "仔细地", example: "Please write carefully." },
-      { en: "together", phonetic: "/təˈɡeðə/", zh: "一起", example: "Let's read together." },
-      { en: "because", phonetic: "/bɪˈkɒz/", zh: "因为", example: "I stay home because it rains." }
+      { en: "interesting", phonetic: "/ˈɪntrəstɪŋ/", zh: "有趣的", example: "This science book is interesting." },
+      { en: "important", phonetic: "/ɪmˈpɔːtnt/", zh: "重要的", example: "Sleep is important for kids." },
+      { en: "different", phonetic: "/ˈdɪfrənt/", zh: "不同的", example: "We have different hobbies." },
+      { en: "favorite", phonetic: "/ˈfeɪvərɪt/", zh: "最喜欢的", example: "My favorite subject is English." },
+      { en: "usually", phonetic: "/ˈjuːʒuəli/", zh: "通常", example: "I usually get up at seven." },
+      { en: "already", phonetic: "/ɔːlˈredi/", zh: "已经", example: "She has already finished her homework." },
+      { en: "suddenly", phonetic: "/ˈsʌdənli/", zh: "突然", example: "It suddenly started to rain." },
+      { en: "carefully", phonetic: "/ˈkeəfəli/", zh: "仔细地", example: "Please read the question carefully." },
+      { en: "politely", phonetic: "/pəˈlaɪtli/", zh: "礼貌地", example: "He asked for help politely." },
+      { en: "celebrate", phonetic: "/ˈselɪbreɪt/", zh: "庆祝", example: "We celebrate Children's Day in June." },
+      { en: "invitation", phonetic: "/ˌɪnvɪˈteɪʃn/", zh: "邀请；请柬", example: "I got an invitation to the party." },
+      { en: "museum", phonetic: "/mjuˈziːəm/", zh: "博物馆", example: "We visited the museum last Sunday." },
+      { en: "adventure", phonetic: "/ədˈventʃə/", zh: "冒险；奇遇", example: "The story is about a forest adventure." },
+      { en: "discover", phonetic: "/dɪˈskʌvə/", zh: "发现", example: "Scientists discover new stars." },
+      { en: "protect", phonetic: "/prəˈtekt/", zh: "保护", example: "We should protect wild animals." },
+      { en: "environment", phonetic: "/ɪnˈvaɪrənmənt/", zh: "环境", example: "Keep the environment clean." },
+      { en: "delicious", phonetic: "/dɪˈlɪʃəs/", zh: "美味的", example: "Mom cooked a delicious dinner." },
+      { en: "comfortable", phonetic: "/ˈkʌmftəbl/", zh: "舒服的", example: "This chair is very comfortable." },
+      { en: "dangerous", phonetic: "/ˈdeɪndʒərəs/", zh: "危险的", example: "Crossing the street alone is dangerous." },
+      { en: "successful", phonetic: "/səkˈsesfl/", zh: "成功的", example: "Practice helps you be successful." },
+      { en: "experience", phonetic: "/ɪkˈspɪəriəns/", zh: "经历；经验", example: "Camping was a great experience." },
+      { en: "information", phonetic: "/ˌɪnfəˈmeɪʃn/", zh: "信息", example: "Please find information on the Internet." },
+      { en: "conversation", phonetic: "/ˌkɒnvəˈseɪʃn/", zh: "对话；谈话", example: "We had a short conversation in English." },
+      { en: "understand", phonetic: "/ˌʌndəˈstænd/", zh: "理解；明白", example: "Do you understand this sentence?" },
+      { en: "remember", phonetic: "/rɪˈmembə/", zh: "记住；记得", example: "Remember to bring your notebook." },
+      { en: "decide", phonetic: "/dɪˈsaɪd/", zh: "决定", example: "They decide to plant more trees." },
+      { en: "collect", phonetic: "/kəˈlekt/", zh: "收集", example: "He likes to collect stamps." },
+      { en: "borrow", phonetic: "/ˈbɒrəʊ/", zh: "借入", example: "May I borrow your eraser?" },
+      { en: "return", phonetic: "/rɪˈtɜːn/", zh: "归还；返回", example: "Please return the book on time." },
+      { en: "weekend", phonetic: "/ˌwiːkˈend/", zh: "周末", example: "We often go hiking on the weekend." }
     ];
 
     const BOOK_PAGES = [
       {
         scene: "home",
         icons: ["☀️", "🏠", "🐰"],
-        en: "Bunny wakes up in the morning. The sun is bright.",
-        zh: "小兔子早上醒来。太阳很明亮。"
+        en: "Bunny wakes up early. Today feels special and exciting.",
+        zh: "小兔子早早醒来。今天让人觉得特别又兴奋。"
       },
       {
         scene: "home",
-        icons: ["🥛", "🍞", "🐰"],
-        en: "He has milk and bread for breakfast. He feels happy.",
-        zh: "他早餐喝牛奶、吃面包。他觉得很开心。"
+        icons: ["🥪", "🍎", "🐰"],
+        en: "He prepares a delicious breakfast and packs his favorite book.",
+        zh: "他准备了美味的早餐，并装上自己最喜欢的书。"
       },
       {
         scene: "school",
         icons: ["🎒", "🏫", "🐰"],
-        en: "Bunny goes to school with his friend Duck.",
-        zh: "小兔子和朋友小鸭子一起去学校。"
+        en: "Bunny walks to school with Duck. They talk about a museum trip.",
+        zh: "小兔子和鸭子一起步行去学校。他们谈论博物馆之旅。"
       },
       {
         scene: "school",
-        icons: ["📚", "✏️", "🐰"],
-        en: "In class, they learn new words and write carefully.",
-        zh: "在课堂上，他们学习新单词，并认真书写。"
+        icons: ["📚", "🔬", "🐰"],
+        en: "In class, they discover interesting information about wild animals.",
+        zh: "课堂上，他们发现了关于野生动物的有趣信息。"
       },
       {
         scene: "park",
-        icons: ["🌳", "⚽", "🐰"],
-        en: "After school, they play football in the park.",
-        zh: "放学后，他们在公园踢足球。"
+        icons: ["🌳", "🛡️", "🐰"],
+        en: "After school, they clean the park to protect the environment.",
+        zh: "放学后，他们打扫公园，保护环境。"
       },
       {
         scene: "night",
         icons: ["🌙", "⭐", "🐰"],
-        en: "At night, Bunny reads a book and says, \"Good night!\"",
-        zh: "晚上，小兔子读一本书，然后说：“晚安！”"
+        en: "At night, Bunny writes about this successful day in his diary.",
+        zh: "晚上，小兔子在日记里写下这成功的一天。"
       }
     ];
 
     const READING_QUESTIONS = [
       {
-        q: "1. What does Bunny have for breakfast?",
-        options: ["Milk and bread", "Rice and fish", "Cake and juice", "Eggs only"],
+        q: "1. What does Bunny pack besides breakfast?",
+        options: ["His favorite book", "A football", "A camera", "A toy car"],
         answer: 0
       },
       {
-        q: "2. Who goes to school with Bunny?",
-        options: ["Cat", "Duck", "Bear", "Bird"],
+        q: "2. What do Bunny and Duck talk about on the way to school?",
+        options: ["A birthday cake", "A museum trip", "A rainy day", "A new bike"],
         answer: 1
       },
       {
-        q: "3. What do they do in the park after school?",
-        options: ["Swim", "Sing songs", "Play football", "Sleep"],
+        q: "3. Why do they clean the park after school?",
+        options: ["To play football", "To find treasure", "To protect the environment", "To wait for the bus"],
         answer: 2
       }
     ];
