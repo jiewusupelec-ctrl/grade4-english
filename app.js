@@ -221,120 +221,195 @@
     return d.getFullYear() + "-W" + week;
   }
 
-  /* ========== iOS Safari 友好朗读 ========== */
-  var voicesReady = false;
+  /* ========== 更自然的免费在线朗读（Google / 有道，系统语音兜底） ========== */
   var speechUnlocked = false;
   var speakQueue = [];
   var speaking = false;
+  var currentAudio = null;
+  var storyPauseMs = 480;
 
-  function loadVoices() {
-    if (!window.speechSynthesis) return [];
-    return window.speechSynthesis.getVoices() || [];
-  }
-
-  if (window.speechSynthesis) {
-    loadVoices();
-    if (window.speechSynthesis.onvoiceschanged !== undefined) {
-      window.speechSynthesis.onvoiceschanged = function () {
-        voicesReady = true;
-        loadVoices();
-      };
-    }
-    // iOS sometimes pauses speech; keep it alive
-    setInterval(function () {
+  function stopSpeaking() {
+    speakQueue = [];
+    speaking = false;
+    if (currentAudio) {
       try {
-        if (window.speechSynthesis && window.speechSynthesis.speaking) {
-          window.speechSynthesis.pause();
-          window.speechSynthesis.resume();
-        }
+        currentAudio.onended = null;
+        currentAudio.onerror = null;
+        currentAudio.pause();
+        currentAudio.removeAttribute("src");
+        currentAudio.load();
       } catch (e) {}
-    }, 12000);
-  }
-
-  function pickEnglishVoice() {
-    var voices = loadVoices();
-    var i;
-    for (i = 0; i < voices.length; i++) {
-      if (/en(-|_)?US/i.test(voices[i].lang) && /samantha|karen|daniel|moira|female|male/i.test(voices[i].name)) {
-        return voices[i];
-      }
+      currentAudio = null;
     }
-    for (i = 0; i < voices.length; i++) {
-      if (/^en/i.test(voices[i].lang)) return voices[i];
+    if (window.speechSynthesis) {
+      try { window.speechSynthesis.cancel(); } catch (e2) {}
     }
-    return null;
   }
 
   function unlockSpeech() {
-    if (speechUnlocked || !window.speechSynthesis) return;
+    if (speechUnlocked) return;
+    speechUnlocked = true;
     try {
-      var warm = new SpeechSynthesisUtterance(" ");
-      warm.volume = 0;
-      warm.rate = 1;
-      window.speechSynthesis.speak(warm);
-      window.speechSynthesis.cancel();
-      speechUnlocked = true;
+      var a = new Audio("data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=");
+      a.volume = 0.01;
+      var p = a.play();
+      if (p && p.catch) p.catch(function () {});
     } catch (e) {}
+    if (window.speechSynthesis) {
+      try {
+        var warm = new SpeechSynthesisUtterance(" ");
+        warm.volume = 0;
+        window.speechSynthesis.speak(warm);
+        window.speechSynthesis.cancel();
+      } catch (e2) {}
+    }
+  }
+
+  function isSingleWord(text) {
+    return /^[A-Za-z][A-Za-z\-']{0,40}$/.test(String(text).trim());
+  }
+
+  function splitStoryChunks(text) {
+    var raw = String(text).replace(/\s+/g, " ").trim();
+    if (!raw) return [];
+    var parts = raw.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [raw];
+    var chunks = [];
+    for (var i = 0; i < parts.length; i++) {
+      var s = parts[i].trim();
+      if (!s) continue;
+      while (s.length > 180) {
+        var cut = s.lastIndexOf(" ", 180);
+        if (cut < 40) cut = 180;
+        chunks.push(s.slice(0, cut).trim());
+        s = s.slice(cut).trim();
+      }
+      if (s) chunks.push(s);
+    }
+    return chunks;
+  }
+
+  function googleTtsUrl(text) {
+    return "https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=en&q=" + encodeURIComponent(text);
+  }
+
+  function youdaoTtsUrl(text) {
+    return "https://dict.youdao.com/dictvoice?type=2&audio=" + encodeURIComponent(text);
+  }
+
+  function playAudioUrl(url, onDone, onFail) {
+    var audio = new Audio();
+    currentAudio = audio;
+    audio.preload = "auto";
+    var finished = false;
+    var timer = setTimeout(function () {
+      if (!finished && audio.readyState < 2) {
+        finished = true;
+        if (currentAudio === audio) currentAudio = null;
+        onFail && onFail();
+      }
+    }, 9000);
+
+    function finishOk() {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timer);
+      if (currentAudio === audio) currentAudio = null;
+      onDone && onDone();
+    }
+
+    function finishFail() {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timer);
+      if (currentAudio === audio) currentAudio = null;
+      onFail && onFail();
+    }
+
+    audio.onended = finishOk;
+    audio.onerror = finishFail;
+    audio.src = url;
+    var p = audio.play();
+    if (p && p.then) {
+      p.then(function () {}).catch(function () { finishFail(); });
+    }
+  }
+
+  function speakWithSystem(text, onDone) {
+    if (!window.speechSynthesis) {
+      onDone && onDone();
+      return;
+    }
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang = "en-US";
+    u.rate = 0.88;
+    u.pitch = 1.02;
+    var voices = window.speechSynthesis.getVoices() || [];
+    for (var i = 0; i < voices.length; i++) {
+      if (/^en/i.test(voices[i].lang) && /samantha|karen|moira|female|enhanced|premium|neural|siri/i.test(voices[i].name)) {
+        u.voice = voices[i];
+        break;
+      }
+    }
+    u.onend = function () { onDone && onDone(); };
+    u.onerror = function () { onDone && onDone(); };
+    try { window.speechSynthesis.cancel(); } catch (e) {}
+    setTimeout(function () {
+      try { window.speechSynthesis.speak(u); } catch (e2) { onDone && onDone(); }
+    }, 40);
+  }
+
+  function speakChunkNatural(text, isStory, onDone) {
+    var primary = (isStory || !isSingleWord(text)) ? googleTtsUrl(text) : youdaoTtsUrl(text);
+    var secondary = (isStory || !isSingleWord(text)) ? youdaoTtsUrl(text) : googleTtsUrl(text);
+    playAudioUrl(primary, onDone, function () {
+      playAudioUrl(secondary, onDone, function () {
+        speakWithSystem(text, onDone);
+      });
+    });
   }
 
   function speakNext() {
-    if (!window.speechSynthesis || speaking) return;
+    if (speaking) return;
     if (!speakQueue.length) return;
     speaking = true;
-    var text = speakQueue.shift();
-    var u = new SpeechSynthesisUtterance(text);
-    u.lang = "en-US";
-    u.rate = 0.9;
-    u.pitch = 1;
-    var voice = pickEnglishVoice();
-    if (voice) u.voice = voice;
+    var item = speakQueue.shift();
+    var text = typeof item === "string" ? item : item.text;
+    var isStory = typeof item === "object" && !!item.story;
+    var pauseAfter = isStory ? storyPauseMs : 220;
 
-    u.onend = function () {
-      speaking = false;
-      speakNext();
-    };
-    u.onerror = function () {
-      speaking = false;
-      speakNext();
-    };
-
-    // iOS: cancel then slight delay before speak
-    try { window.speechSynthesis.cancel(); } catch (e) {}
-    setTimeout(function () {
-      try {
-        window.speechSynthesis.speak(u);
-      } catch (err) {
+    speakChunkNatural(text, isStory, function () {
+      setTimeout(function () {
         speaking = false;
-      }
-    }, 60);
+        speakNext();
+      }, pauseAfter);
+    });
   }
 
-  function speak(text, append) {
-    if (!window.speechSynthesis) {
-      alert("当前浏览器暂不支持朗读。请确认系统设置里已开启朗读功能，或更新 iOS。");
-      return;
-    }
+  function speak(text, opts) {
+    opts = opts || {};
     unlockSpeech();
-    if (!append) {
-      speakQueue = [];
-      speaking = false;
-      try { window.speechSynthesis.cancel(); } catch (e) {}
+    if (!opts.append) stopSpeaking();
+    var mode = opts.mode || (isSingleWord(text) ? "word" : "line");
+    if (mode === "story") {
+      var chunks = splitStoryChunks(text);
+      for (var i = 0; i < chunks.length; i++) {
+        speakQueue.push({ text: chunks[i], story: true });
+      }
+    } else {
+      speakQueue.push({ text: String(text), story: false });
     }
-    speakQueue.push(String(text));
     speakNext();
   }
 
   function speakList(texts) {
-    if (!texts || !texts.length) return;
     unlockSpeech();
-    speakQueue = [];
-    speaking = false;
-    try { window.speechSynthesis.cancel(); } catch (e) {}
-    for (var i = 0; i < texts.length; i++) speakQueue.push(texts[i]);
+    stopSpeaking();
+    for (var i = 0; i < texts.length; i++) {
+      speakQueue.push({ text: texts[i], story: false });
+    }
     speakNext();
   }
 
-  // Unlock on first touch/click anywhere (required by iOS)
   function firstInteract() {
     unlockSpeech();
     document.removeEventListener("touchstart", firstInteract, true);
@@ -534,7 +609,7 @@
     var pages = currentPages();
     document.getElementById("book-title").textContent = "绘本阅读：《" + currentStory.titleZh + "》";
     document.getElementById("book-hint").textContent =
-      "今日绘本会在每天早上自动更换。先读完再做 3 道题，可点“朗读本页”。";
+      "今日绘本每天早上自动更换。点“朗读本页”会用更自然的语音，一句一句讲给你听。";
 
     var pagesEl = document.getElementById("book-pages");
     var dotsEl = document.getElementById("page-dots");
@@ -593,7 +668,7 @@
 
   document.getElementById("book-speak").addEventListener("click", function () {
     var page = currentPages()[pageIndex];
-    if (page) speak(page.en);
+    if (page) speak(page.en, { mode: "story" });
   });
 
   document.getElementById("submit-reading").addEventListener("click", function () {
